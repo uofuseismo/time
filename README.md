@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/uofuseismo/time.svg?style=svg&circle-token=build_status)](https://circleci.com/gh/uofuseismo/time)
+
 # Overview
 
 This a simple package for converting between time expressed as seconds since the epoch (January 1 1970) and time expressed as year/month/day/hour/minute/second.
