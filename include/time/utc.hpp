@@ -1,6 +1,7 @@
 #ifndef TIME_UTC_HPP
 #define TIME_UTC_HPP
 #include <ostream>
+#include <string>
 #include <memory>
 namespace Time
 {
@@ -18,6 +19,9 @@ public:
     /// @param[in] time   The UTC time stamp measured in seconds from the epoch. 
     /// @sa \c setEpoch()
     explicit UTC(double time);
+    /// @brief Initializes a time from string-time stamp.
+    /// @param[in] time   The time stamp in YYYY-MM-DD:HH:MM:SS.XXXXXX form.
+    explicit UTC(const std::string &time);
     /// @brief Copy constructor.
     /// @param[in] time  The time class from which to initialize this class.
     UTC(const UTC &time);

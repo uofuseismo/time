@@ -1,6 +1,7 @@
 #include <ostream>
 #include <date/date.h>
 #include <iostream>
+#include <string>
 #include <cmath>
 #include <chrono>
 #include <cassert>
@@ -148,6 +149,31 @@ UTC::UTC(const double epoch) :
 {
     setEpoch(epoch);
 }
+
+UTC::UTC(const std::string &time) :
+    pImpl(std::make_unique<UTCImpl> ())
+{
+    int year;
+    int month;
+    int dom;
+    int hour;
+    int minute;
+    int second;
+    int microSecond;
+    sscanf(time.c_str(),
+           "%04d-%02d-%02dT%02d:%02d:%02d.%06d",
+           &year, &month, &dom, &hour, &minute, &second, &microSecond); 
+    UTC temp;
+    temp.setYear(year);
+    temp.setMonthAndDay(std::pair<int, int> (month, dom));
+    temp.setHour(hour);
+    temp.setMinute(minute);
+    temp.setSecond(second);
+    temp.setMicroSecond(microSecond);
+    *this = std::move(temp);
+}
+
+
 
 /// Copy assignment
 UTC::UTC(const UTC &time)

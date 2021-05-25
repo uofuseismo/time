@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "time/utc.hpp"
 #include <gtest/gtest.h>
 
@@ -173,6 +174,18 @@ TEST(Time, TimeOperators)
     EXPECT_NEAR(time4.getEpoch(), 1578513045.372 + 86400, 1.e-4);
 }
 
-
+TEST(Time, StringConstructor)
+{
+    // Test the string constructor
+    std::string s("2020-03-17T08:01:33.009000"); // St Patty's Day 2020
+    Time::UTC strTime(s);
+    EXPECT_EQ(strTime.getYear(), 2020);
+    EXPECT_EQ(strTime.getMonth(), 3); 
+    EXPECT_EQ(strTime.getDayOfMonth(), 17);
+    EXPECT_EQ(strTime.getHour(), 8); 
+    EXPECT_EQ(strTime.getMinute(), 1); 
+    EXPECT_EQ(strTime.getSecond(), 33);
+    EXPECT_EQ(strTime.getMicroSecond(), 9000); 
+}
 
 }
