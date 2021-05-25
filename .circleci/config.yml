@@ -1,0 +1,39 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: bakerb845/build_time
+    steps:
+      - checkout
+      - run:
+          name: Print the Current Time
+          command: date
+      - run:
+          name: Configure the code
+          command: |
+            export GTEST_ROOT=/usr/local
+            export BUILD_DIR=build
+            if [ -d ${BUILD_DIR} ]; then
+               echo "Removing build directory" ${BUILD_DIR}
+               rm -rf ${BUILD_DIR}
+            fi
+            mkdir ${BUILD_DIR}
+            cd ${BUILD_DIR}
+            cmake .. \
+            -DCMAKE_CXX_FLAGS="-O2 -Wall" \
+            -DCMAKE_CXX_STANDARD_LIBRARIES="-lpthread"
+      - run:
+           name: Build the code
+           command: |
+            cd build 
+            make
+      - run:
+           name: Test the code
+           command: |
+            cd build
+            ctest --verbose
+      - run:
+           name: Install the ode 
+           command: |
+            cd build
+            make install
