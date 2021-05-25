@@ -40,6 +40,7 @@ set_target_properties(unitTests PROPERTIES
                       CXX_EXTENSIONS NO)
 target_link_libraries(unitTests PRIVATE time ${GTEST_BOTH_LIBRARIES})
 target_include_directories(unitTests
+                           PRIVATE ${GTEST_INCLUDE_DIRS}
                            PUBLIC $<BUILD_INTERFACE:${PUBLIC_HEADER_DIRECTORIES}>)
 add_test(NAME unitsTests
          COMMAND unitTests)
