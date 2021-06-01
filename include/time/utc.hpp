@@ -21,6 +21,8 @@ public:
     explicit UTC(double time);
     /// @brief Initializes a time from string-time stamp.
     /// @param[in] time   The time stamp in YYYY-MM-DD:HH:MM:SS.XXXXXX form.
+    /// @throws std::invalid_argument if the string length is unexpected.
+    /// @note This can also parse YYYY-MM-DD:HH:MM:SS form.
     explicit UTC(const std::string &time);
     /// @brief Copy constructor.
     /// @param[in] time  The time class from which to initialize this class.
