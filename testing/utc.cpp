@@ -186,6 +186,16 @@ TEST(Time, StringConstructor)
     EXPECT_EQ(strTime.getMinute(), 1); 
     EXPECT_EQ(strTime.getSecond(), 33);
     EXPECT_EQ(strTime.getMicroSecond(), 9000); 
+
+    std::string s2("2020-03-17T08:01:33"); // For when people violate the rules
+    Time::UTC strTime2(s2);
+    EXPECT_EQ(strTime2.getYear(), 2020);
+    EXPECT_EQ(strTime2.getMonth(), 3); 
+    EXPECT_EQ(strTime2.getDayOfMonth(), 17);
+    EXPECT_EQ(strTime2.getHour(), 8); 
+    EXPECT_EQ(strTime2.getMinute(), 1); 
+    EXPECT_EQ(strTime2.getSecond(), 33);
+    EXPECT_EQ(strTime2.getMicroSecond(), 0); 
 }
 
 }

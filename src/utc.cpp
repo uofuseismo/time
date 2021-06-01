@@ -159,10 +159,25 @@ UTC::UTC(const std::string &time) :
     int hour;
     int minute;
     int second;
-    int microSecond;
-    sscanf(time.c_str(),
-           "%04d-%02d-%02dT%02d:%02d:%02d.%06d",
-           &year, &month, &dom, &hour, &minute, &second, &microSecond); 
+    int microSecond = 0;
+    if (time.size() == 26)
+    {
+        sscanf(time.c_str(),
+               "%04d-%02d-%02dT%02d:%02d:%02d.%06d",
+               &year, &month, &dom, &hour, &minute, &second, &microSecond); 
+    }
+    else if (time.size() == 19)
+    {
+        sscanf(time.c_str(),
+               "%04d-%02d-%02dT%02d:%02d:%02d",
+               &year, &month, &dom, &hour, &minute, &second); 
+    }
+    else
+    {
+        std::string errmsg = "Cannot parse " + time + " with length = "
+                           + std::to_string(time.size());
+        throw std::invalid_argument(errmsg);
+    }
     UTC temp;
     temp.setYear(year);
     temp.setMonthAndDay(std::pair<int, int> (month, dom));
