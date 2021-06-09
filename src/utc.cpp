@@ -227,6 +227,17 @@ void UTC::clear() noexcept
     pImpl = std::make_unique<UTCImpl> ();
 }
 
+/// Set time to now
+void UTC::now() noexcept
+{
+    auto time = std::chrono::system_clock::now().time_since_epoch();
+    auto timeStamp
+        = static_cast<double>
+          (std::chrono::duration_cast<std::chrono::microseconds> (time).count())
+         *1.e-6;
+    setEpoch(timeStamp);
+}
+
 /// Get epochal time
 double UTC::getEpoch() const noexcept
 {

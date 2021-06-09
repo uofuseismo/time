@@ -45,6 +45,9 @@ public:
     UTC& operator=(UTC &&time) noexcept;
     /// @}
      
+    /// @brief Sets the time to now.
+    void now() noexcept;
+
     /// @brief Sets the seconds since the epoch.
     /// @param[in] timeStamp   The seconds since the epoch (Jan 1 1970).
     void setEpoch(double timeStamp) noexcept;
