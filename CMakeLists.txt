@@ -63,6 +63,11 @@ target_include_directories(unitTests
 add_test(NAME unitsTests
          COMMAND unitTests)
 
+if (WRAP_PYTHON)
+   add_test(NAME python_tests
+            COMMAND ${PYTHON_EXECUTABLE} -m pytest)
+endif()
+
 #========================================================================================#
 #                                      Installation                                      #
 #========================================================================================#
@@ -75,6 +80,7 @@ if (WRAP_PYTHON)
            INCLUDES
            PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 else()
+   file(COPY ${CMAKE_SOURCE_DIR}/python/unit_tests.py DESTINATION .)
    install(TARGETS time
            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
