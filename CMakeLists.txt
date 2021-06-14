@@ -29,6 +29,24 @@ set_target_properties(time PROPERTIES
                       CXX_STANDARD_REQUIRED YES
                       CXX_EXTENSIONS NO)
 
+# Python bindings
+option(WRAP_PYTHON "WRAP_PYTHON" OFF)
+if (WRAP_PYTHON)
+   find_package(pybind11 REQUIRED)
+   add_library(pytime MODULE
+               python/pytime.cpp
+               python/putc.cpp)
+   target_link_libraries(pytime PRIVATE pybind11::module time)
+   target_include_directories(pytime
+                              PRIVATE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/python>
+                              PRIVATE $<BUILD_INTERFACE:${PUBLIC_HEADER_DIRECTORIES})
+   set_target_properties(pytime PROPERTIES
+                         PREFIX ""
+                         CXX_STANDARD 17
+                         CXX_STANDARD_REQUIRED YES
+                         CXX_EXTENSIONS NO) 
+endif()
+
 # Unit testing
 set(TEST_SRC
     testing/main.cpp
