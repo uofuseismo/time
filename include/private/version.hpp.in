@@ -7,8 +7,8 @@
 #define TIME_VERSION "@PROJECT_VERSION@"
 namespace Time
 {
-/// @class Version version.hpp "rtseis/version.hpp"
-/// @brief Defines RTSeis version information.
+/// @class Version version.hpp "time/version.hpp"
+/// @brief Defines library's version information.
 /// @copyright Ben Baker (University of Utah) distributed under the MIT license.
 class Version
 {
