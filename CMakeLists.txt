@@ -23,7 +23,7 @@ add_library(time SHARED ${SRC})
 target_include_directories(time
                            PRIVATE date::date
                            PUBLIC $<BUILD_INTERFACE:${PUBLIC_HEADER_DIRECTORIES}>
-                           PUBLIC $<INSTALL_INTERFACE:${PUBLIC_HEADER_DIRECTORIES})
+                           PUBLIC $<INSTALL_INTERFACE:${PUBLIC_HEADER_DIRECTORIES}>)
 set_target_properties(time PROPERTIES
                       CXX_STANDARD 17
                       CXX_STANDARD_REQUIRED YES
@@ -77,9 +77,9 @@ if (WRAP_PYTHON)
    install(TARGETS time pytime
            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-           ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-           INCLUDES
-           PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+           ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   #        INCLUDES
+   #        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 else()
    install(TARGETS time
            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -91,12 +91,15 @@ install(DIRECTORY ${PUBLIC_HEADER_DIRECTORIES}/time
 ##########################################################################################
 #                                     CPACK Packaging                                    #
 ##########################################################################################
-set(CPACK_PACKAGE_NAME "time")
+set(CPACK_PACKAGE_NAME ${CMAKE_PROJECT_NAME})
+set(CPACK_GENERATOR "TGZ")
 set(CPACK_PACKAGE_VENDOR "UUSS")
-set(CPACK_PACKAGE_CONTACT "bbaker@seis.utah.edu")
+set(CPACK_PACKAGE_CONTACT "ben.baker@utah.edu")
 set(CPACK_PACKAGE_LICENSE "MIT")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A library for common time manipulations in seismology.")
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_COMPONENTS_ALL libraries headers)
+include(CPack)
