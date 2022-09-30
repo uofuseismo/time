@@ -56,7 +56,7 @@ set_target_properties(unitTests PROPERTIES
                       CXX_STANDARD 17
                       CXX_STANDARD_REQUIRED YES
                       CXX_EXTENSIONS NO)
-target_link_libraries(unitTests PRIVATE time GTest::gtest GTest::gtest_main GTest::gmock)#${GTEST_BOTH_LIBRARIES})
+target_link_libraries(unitTests PRIVATE time ${GTEST_BOTH_LIBRARIES})
 target_include_directories(unitTests
                            PRIVATE ${GTEST_INCLUDE_DIRS}
                            PUBLIC $<BUILD_INTERFACE:${PUBLIC_HEADER_DIRECTORIES}>)
