@@ -56,7 +56,7 @@ set_target_properties(unitTests PROPERTIES
                       CXX_STANDARD 17
                       CXX_STANDARD_REQUIRED YES
                       CXX_EXTENSIONS NO)
-target_link_libraries(unitTests PRIVATE time ${GTEST_BOTH_LIBRARIES})
+target_link_libraries(unitTests PRIVATE time GTest::gtest GTest::gtest_main GTest::gmock)#${GTEST_BOTH_LIBRARIES})
 target_include_directories(unitTests
                            PRIVATE ${GTEST_INCLUDE_DIRS}
                            PUBLIC $<BUILD_INTERFACE:${PUBLIC_HEADER_DIRECTORIES}>)
@@ -92,14 +92,31 @@ install(DIRECTORY ${PUBLIC_HEADER_DIRECTORIES}/time
 #                                     CPACK Packaging                                    #
 ##########################################################################################
 set(CPACK_PACKAGE_NAME ${CMAKE_PROJECT_NAME})
-set(CPACK_GENERATOR "TGZ")
 set(CPACK_PACKAGE_VENDOR "UUSS")
 set(CPACK_PACKAGE_CONTACT "ben.baker@utah.edu")
 set(CPACK_PACKAGE_LICENSE "MIT")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A library for common time manipulations in seismology.")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
+set(CPACK_VERBATIM_VARIABLES YES)
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set(CPACK_COMPONENTS_ALL libraries headers)
+if (WIN32)
+    set(CPACK_GENERATOR ZIP WIX)
+elseif (APPLE)
+    set(CPACK_GENERATOR TGZ productbuild)
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(CPACK_GENERATOR TGZ RPM)
+else()
+    set(CPACK_GENERATOR TGZ)
+endif()
+set(CPACK_SOURCE_IGNORE_FILES
+  /\\.git/
+  \\.swp
+  \\.orig
+  /CMakeLists\\.txt\\.user
+  /private/
+)
 include(CPack)
