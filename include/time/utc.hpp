@@ -2,6 +2,7 @@
 #define TIME_UTC_HPP
 #include <ostream>
 #include <string>
+#include <chrono>
 #include <memory>
 namespace Time
 {
@@ -19,6 +20,11 @@ public:
     /// @param[in] time   The UTC time stamp measured in seconds from the epoch. 
     /// @sa \c setEpoch()
     explicit UTC(double time);
+    /// @brief Initializes this class from a time stamp.
+    /// @param[in] time   The UTC time stamp measured in microseconds from
+    ///                   the epoch. 
+    /// @sa \c setEpoch()
+    explicit UTC(const std::chrono::microseconds &time);
     /// @brief Initializes a time from string-time stamp.
     /// @param[in] time   The time stamp in YYYY-MM-DD:HH:MM:SS.XXXXXX form.
     /// @throws std::invalid_argument if the string length is unexpected.
@@ -51,8 +57,12 @@ public:
     /// @brief Sets the seconds since the epoch.
     /// @param[in] timeStamp   The seconds since the epoch (Jan 1 1970).
     void setEpoch(double timeStamp) noexcept;
+    /// @brief Sets the microseconds since the epoch.
+    void setEpoch(const std::chrono::microseconds &timeStamp) noexcept;
     /// @result The seconds since the epoch (Jan 1 1970).
     [[nodiscard]] double getEpoch() const noexcept;
+    /// @result The microseconds since the epoch (Jan 1 1970).
+    [[nodiscard]] std::chrono::microseconds getEpochInMicroSeconds() const noexcept;
 
     /// @brief Sets the year in which to perform the calculation.
     /// @param[in] year  The year which must be in the range [-1000,2999].

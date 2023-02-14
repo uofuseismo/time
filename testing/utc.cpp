@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include <string>
 #include "time/utc.hpp"
 #include <gtest/gtest.h>
@@ -28,6 +29,8 @@ TEST(UTC, BaseTests)
 
     EXPECT_EQ(time.getDayOfYear(), 128);
     EXPECT_NEAR(time.getEpoch(), 1336403638.0001, 1.e-10);
+    EXPECT_EQ(time.getEpochInMicroSeconds().count(),
+              static_cast<int64_t> (std::round(1336403638.0001*1.e6)));
 
     Time::UTC tCopy(time);
     EXPECT_TRUE(tCopy.isLeapYear());
@@ -91,6 +94,18 @@ TEST(UTC, EpochToCalendar)
     EXPECT_EQ(tTest1.getSecond(), 5); 
     EXPECT_EQ(tTest1.getMicroSecond(), 500000);
     EXPECT_FALSE(tTest1.isLeapYear());
+
+    Time::UTC tTest2(std::chrono::microseconds
+         {static_cast<int64_t> (std::round(1230784385.5*1.e6))});
+    EXPECT_EQ(tTest2.getYear(), 2009);
+    EXPECT_EQ(tTest2.getMonth(), 1); 
+    EXPECT_EQ(tTest2.getDayOfMonth(), 1); 
+    EXPECT_EQ(tTest2.getDayOfYear(), 1); 
+    EXPECT_EQ(tTest2.getHour(), 4); 
+    EXPECT_EQ(tTest2.getMinute(), 33);
+    EXPECT_EQ(tTest2.getSecond(), 5); 
+    EXPECT_EQ(tTest2.getMicroSecond(), 500000);
+    EXPECT_FALSE(tTest2.isLeapYear());
 }
 
 TEST(UTC, CalendarToEpoch)

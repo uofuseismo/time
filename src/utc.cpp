@@ -150,6 +150,12 @@ UTC::UTC(const double epoch) :
     setEpoch(epoch);
 }
 
+UTC::UTC(const std::chrono::microseconds &epoch) :
+    pImpl(std::make_unique<UTCImpl> ())
+{
+    setEpoch(epoch);
+}
+
 UTC::UTC(const std::string &time) :
     pImpl(std::make_unique<UTCImpl> ())
 {
@@ -252,9 +258,23 @@ double UTC::getEpoch() const noexcept
     return pImpl->mEpoch;
 }
 
+void UTC::setEpoch(const std::chrono::microseconds &timeStampMuSeconds) noexcept
+{
+    auto timeStamp = static_cast<double> (timeStampMuSeconds.count())*1.e-6;
+    setEpoch(timeStamp);
+}
+
 void UTC::setEpoch(const double timeStamp) noexcept
 {
     pImpl->updateEpoch(timeStamp);
+}
+
+std::chrono::microseconds UTC::getEpochInMicroSeconds() const noexcept
+{
+    auto epoch = getEpoch(); 
+    std::chrono::microseconds
+        result{static_cast<int64_t> (std::round(epoch*1.e6))};
+    return result;
 }
 
 /// Year
