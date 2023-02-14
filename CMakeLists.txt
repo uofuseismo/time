@@ -25,7 +25,7 @@ target_include_directories(time
                            PRIVATE $<BUILD_INTERFACE:${PUBLIC_HEADER_DIRECTORIES}>
                            PUBLIC  $<INSTALL_INTERFACE:include>)
 set_target_properties(time PROPERTIES
-                      CXX_STANDARD 17
+                      CXX_STANDARD 20
                       CXX_STANDARD_REQUIRED YES
                       CXX_EXTENSIONS NO)
 
@@ -42,7 +42,7 @@ if (WRAP_PYTHON)
                               PRIVATE $<BUILD_INTERFACE:${PUBLIC_HEADER_DIRECTORIES})
    set_target_properties(pytime PROPERTIES
                          PREFIX ""
-                         CXX_STANDARD 17
+                         CXX_STANDARD 20
                          CXX_STANDARD_REQUIRED YES
                          CXX_EXTENSIONS NO) 
 endif()
@@ -53,7 +53,7 @@ set(TEST_SRC
     testing/utc.cpp)
 add_executable(unitTests ${TEST_SRC})
 set_target_properties(unitTests PROPERTIES
-                      CXX_STANDARD 17
+                      CXX_STANDARD 20
                       CXX_STANDARD_REQUIRED YES
                       CXX_EXTENSIONS NO)
 target_link_libraries(unitTests PRIVATE time ${GTEST_BOTH_LIBRARIES})

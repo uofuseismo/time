@@ -6,7 +6,7 @@ This a simple package for converting between time expressed as seconds since the
 
 # Prerequisites
 
-   1. A C++17 compiler.
+   1. A C++20 compiler.
    2. [CMake](https://cmake.org/) v.3.16 or greater.
    3. Howard Hinnant's [date](https://github.com/HowardHinnant/date) header-only library.
    4. [Google Test](https://github.com/google/googletest)
