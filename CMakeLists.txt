@@ -39,7 +39,7 @@ if (WRAP_PYTHON)
    target_link_libraries(pytime PRIVATE pybind11::module time)
    target_include_directories(pytime
                               PRIVATE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/python>
-                              PRIVATE $<BUILD_INTERFACE:${PUBLIC_HEADER_DIRECTORIES})
+                              PRIVATE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>)
    set_target_properties(pytime PROPERTIES
                          PREFIX ""
                          CXX_STANDARD 20
