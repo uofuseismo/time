@@ -1,11 +1,12 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.24)
 project(Time VERSION 1.0.1 LANGUAGES CXX)
 enable_testing()
 
 # Ensure we have necessary packages 
 include(CheckCXXCompilerFlag)
 find_package(GTest REQUIRED)
-find_package(date COMPONENTS date::date REQUIRED)
+#find_package(date COMPONENTS date::date)
+# REQUIRED)
 
 # Include information
 configure_file(${CMAKE_SOURCE_DIR}/include/private/version.hpp.in
@@ -21,13 +22,17 @@ set(SRC
     src/version.cpp)
 add_library(time SHARED ${SRC})
 target_include_directories(time
-                           PRIVATE date::date
                            PRIVATE $<BUILD_INTERFACE:${PUBLIC_HEADER_DIRECTORIES}>
                            PUBLIC  $<INSTALL_INTERFACE:include>)
 set_target_properties(time PROPERTIES
                       CXX_STANDARD 20
                       CXX_STANDARD_REQUIRED YES
                       CXX_EXTENSIONS NO)
+if (${date_FOUND})
+   target_link_libraries(time PRIVATE date::time)
+   add_compile_definitions(time PRIVATE WITH_DATE)
+endif()
+
 
 # Python bindings
 option(WRAP_PYTHON "WRAP_PYTHON" OFF)

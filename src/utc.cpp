@@ -1,5 +1,7 @@
 #include <ostream>
+#ifdef WITH_DATE
 #include <date/date.h>
+#endif
 #include <iostream>
 #include <string>
 #include <cmath>
@@ -14,7 +16,7 @@ class UTC::UTCImpl
 public:
     /// Sets a date based on the epochal time
     void updateEpoch(const double timeStamp)
-    {
+    {   
         // Figure out the fractional second 
         auto iUTCStamp = static_cast<int64_t> (timeStamp);
         auto fraction = timeStamp - static_cast<double> (iUTCStamp);
@@ -23,8 +25,8 @@ public:
         std::chrono::seconds chronoSeconds(iUTCStamp);
         std::chrono::system_clock::time_point timePoint{chronoSeconds};
         // Set the year/month/day
-        auto dayPoint = date::floor<date::days> (timePoint);
-        date::year_month_day ymd{dayPoint};
+        auto dayPoint = std::chrono::floor<std::chrono::days> (timePoint);
+        std::chrono::year_month_day ymd{dayPoint};
         auto year = static_cast<int> (ymd.year());
         auto month = static_cast<int> (unsigned(ymd.month()));
         auto dom = static_cast<int> (unsigned(ymd.day()));
@@ -32,7 +34,7 @@ public:
         updateMonth(month);
         updateDayOfMonth(dom);
         // Update hour/minute/second        
-        date::hh_mm_ss tod{timePoint - dayPoint};
+        std::chrono::hh_mm_ss tod{timePoint - dayPoint};
         auto hour = static_cast<int> (tod.hours().count());
         auto minute = static_cast<int> (tod.minutes().count());
         auto second = static_cast<int> (tod.seconds().count());
@@ -42,12 +44,12 @@ public:
         // I have the epoch
         mEpoch = timeStamp;
         mHaveEpoch = true;
-    } 
+    }   
     /// Updates the year
     void updateYear(const int year)
     {
-        mYear = date::year{year};
-        mYMD = date::year_month_day{mYear, mMonth, mDay};
+        mYear = std::chrono::year{year};
+        mYMD = std::chrono::year_month_day{mYear, mMonth, mDay};
 #ifndef NDEBUG
         assert(mYMD.ok());
 #endif
@@ -55,8 +57,8 @@ public:
     }
     void updateMonth(const int month)
     {
-        mMonth = date::month{static_cast<unsigned int> (month)};
-        mYMD = date::year_month_day{mYear, mMonth, mDay};
+        mMonth = std::chrono::month{static_cast<unsigned int> (month)};
+        mYMD = std::chrono::year_month_day{mYear, mMonth, mDay};
 #ifndef NDEBUG
         assert(mYMD.ok());
 #endif
@@ -64,8 +66,8 @@ public:
     }
     void updateDayOfMonth(const int day)
     {
-        mDay = date::day{static_cast<unsigned int> (day)};
-        mYMD = date::year_month_day{mYear, mMonth, mDay}; 
+        mDay = std::chrono::day{static_cast<unsigned int> (day)};
+        mYMD = std::chrono::year_month_day{mYear, mMonth, mDay}; 
 #ifndef NDEBUG
         assert(mYMD.ok());
 #endif
@@ -75,21 +77,21 @@ public:
     void updateHour(const int hour)
     {
         mHour = std::chrono::hours{hour};
-        mHMS = date::hh_mm_ss<std::chrono::seconds> {mHour + mMinute + mSecond};
+        mHMS = std::chrono::hh_mm_ss<std::chrono::seconds> {mHour + mMinute + mSecond};
         mHaveEpoch = false;
     }
     // Updates the minute
     void updateMinute(const int minute)
     {
         mMinute = std::chrono::minutes{minute};
-        mHMS = date::hh_mm_ss<std::chrono::seconds> {mHour + mMinute + mSecond};
+        mHMS = std::chrono::hh_mm_ss<std::chrono::seconds> {mHour + mMinute + mSecond};
         mHaveEpoch = false;
     }
     // Updates the second
     void updateSecond(const int second)
     {
         mSecond = std::chrono::seconds{second};
-        mHMS = date::hh_mm_ss<std::chrono::seconds> {mHour + mMinute + mSecond};
+        mHMS = std::chrono::hh_mm_ss<std::chrono::seconds> {mHour + mMinute + mSecond};
         mHaveEpoch = false;
     }
     // Updates the microsecond
@@ -101,19 +103,19 @@ public:
     // Updates the day of the year
     void updateDayOfYear()
     {
-        mStartOfYear = date::year_month_day{mYear, date::month{1}, date::day{1}};
+        mStartOfYear = std::chrono::year_month_day{mYear, std::chrono::month{1}, std::chrono::day{1}};
 #ifndef NDEBUG
         assert(mStartOfYear.ok());
 #endif
-        auto jday = date::sys_days{mYMD} - date::sys_days{mStartOfYear};
+        auto jday = std::chrono::sys_days{mYMD} - std::chrono::sys_days{mStartOfYear};
         mDayOfYear = static_cast<int> (jday.count()) + 1;
         mHaveEpoch = false;
     }
     // Update the the month and day of month given the day of the year
     void updateMonthAndDay(int doy)
     {
-        mYMD = date::year_month_day{date::days{doy - 1}
-                                  + date::sys_days{mStartOfYear}};
+        mYMD = std::chrono::year_month_day{std::chrono::days{doy - 1}
+                                         + std::chrono::sys_days{mStartOfYear}};
 #ifndef NDEBUG
         assert(mYMD.ok());
 #endif
@@ -123,15 +125,15 @@ public:
         mHaveEpoch = false;
     }
 
-    date::year mYear{1970};
-    date::month mMonth{1};
-    date::day mDay{1};
-    date::year_month_day mYMD{mYear, mMonth, mDay};
-    date::year_month_day mStartOfYear{mYear, mMonth, mDay};
+    std::chrono::year mYear{1970};
+    std::chrono::month mMonth{1};
+    std::chrono::day mDay{1};
+    std::chrono::year_month_day mYMD{mYear, mMonth, mDay};
+    std::chrono::year_month_day mStartOfYear{mYear, mMonth, mDay};
     std::chrono::hours mHour{0};
     std::chrono::minutes mMinute{0};
     std::chrono::seconds mSecond{0};
-    date::hh_mm_ss<std::chrono::seconds> mHMS{mHour + mMinute + mSecond};
+    std::chrono::hh_mm_ss<std::chrono::seconds> mHMS{mHour + mMinute + mSecond};
     double mEpoch = 0;
     int mDayOfYear = 1;
     int mMicroSecond = 0;
@@ -249,7 +251,7 @@ double UTC::getEpoch() const noexcept
 {
     if (!pImpl->mHaveEpoch)
     {
-        date::sys_days daysPassed{pImpl->mYMD};
+        std::chrono::sys_days daysPassed{pImpl->mYMD};
         auto t = daysPassed.time_since_epoch() + pImpl->mHMS.to_duration();
         auto integralEpoch = static_cast<int64_t> (t.count());
         pImpl->mEpoch = integralEpoch + getMicroSecond()*1.e-6;
